@@ -1,0 +1,12 @@
+# 秘密情報（Notionのトークンなど）。絶対にGitに入れない
+.env
+
+# SQLiteのDBファイルとログ（ラズパイごとに中身が違うのでGitに入れない）
+data/
+logs/
+
+# Pythonの仮想環境やキャッシュ
+.venv/
+venv/
+__pycache__/
+.pytest_cache/

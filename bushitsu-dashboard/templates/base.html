@@ -1,0 +1,21 @@
+{# このファイルの役割：
+   すべての画面に共通する HTML の骨組みです。
+   各画面のテンプレートは {% extends "base.html" %} でこれを引き継ぎ、
+   {% block ... %} の部分だけを書きます。 #}
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  {# iPadやスマホで「ホーム画面に追加」したとき、アドレスバーなしの全画面で開くための設定 #}
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="部室ダッシュボード">
+  <title>{% block title %}部室ダッシュボード{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  {% block content %}{% endblock %}
+</body>
+</html>

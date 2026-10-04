@@ -1,0 +1,52 @@
+{# このファイルの役割：
+   ダッシュボードの画面（URL: /）です。
+   左にカレンダー、右に時計と3つのパネル枠を並べます。
+   右の枠に何を出すかは config.py の PANELS で決まります。 #}
+{% extends "base.html" %}
+
+{% block head %}
+  {# サーバーの設定を JavaScript に渡す（中身は app.py の index() で作っている） #}
+  <script>
+    window.DASHBOARD_CONFIG = {{ js_config | tojson }};
+  </script>
+  {# 時計・夜間表示・パネルの定期更新。パネルのテンプレートより先に読み込む必要がある #}
+  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<main class="dashboard">
+  {# ===== 左側：カレンダー ===== #}
+  <section class="calendar-area">
+    <div class="calendar-placeholder">カレンダー（準備中）</div>
+  </section>
+
+  {# ===== 右側：時計とパネル ===== #}
+  <div class="side">
+    <div class="clock-bar">
+      <span class="clock"></span>
+    </div>
+
+    {% for panel in panels %}
+      {% if panel %}
+        {# パネルの外枠（タイトルと更新状況）。中身は templates/panels/<パネルID>.html #}
+        <section class="panel" data-panel-id="{{ panel.id }}">
+          <header class="panel-header">
+            <h2 class="panel-title">{{ panel.title }}</h2>
+            <span class="panel-status"></span>
+          </header>
+          <div class="panel-body">
+            {% include "panels/" ~ panel.id ~ ".html" %}
+          </div>
+        </section>
+      {% else %}
+        {% include "panels/empty.html" %}
+      {% endif %}
+    {% endfor %}
+  </div>
+</main>
+
+{# 夜間だけ表示する大きな時計 #}
+<div class="night-screen">
+  <span class="clock"></span>
+</div>
+{% endblock %}

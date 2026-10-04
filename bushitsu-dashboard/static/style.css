@@ -1,0 +1,214 @@
+/* このファイルの役割：
+     ダッシュボードの見た目（色・文字の大きさ・配置）を決めます。
+     色や左右の幅は、すぐ下の :root にある「変数」を変えると全体に反映されます。 */
+
+:root {
+  /* 左（カレンダー）の幅。右（パネル）は残りの幅になる */
+  --left-width: 60%;
+
+  /* 色。離れても読めるよう、背景と文字の明るさの差を大きくしている */
+  --color-background: #e9ecef;
+  --color-card: #ffffff;
+  --color-text: #111111;
+  --color-muted: #5f6368;
+  --color-border: #c4c9cf;
+  --color-accent: #1565c0;
+  --color-error: #c62828;
+  --color-night-text: #9e9e9e;
+
+  /* すき間と角の丸み */
+  --gap: 12px;
+  --radius: 12px;
+
+  /* 基本の文字の大きさ */
+  --font-size: 20px;
+}
+
+/* ===== 全体 ===== */
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+    "Noto Sans JP", "Yu Gothic", "Meiryo", sans-serif;
+  font-size: var(--font-size);
+  /* iPadで長押ししたときに文字が選択されないようにする */
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* 左右に分けた画面。iPadの横向きでは画面ぴったりの高さにして、スクロールさせない */
+.dashboard {
+  display: grid;
+  grid-template-columns: var(--left-width) minmax(0, 1fr);
+  gap: var(--gap);
+  height: 100vh;
+  height: 100dvh; /* 対応しているブラウザでは、アドレスバーを除いた本当の高さを使う */
+  padding: var(--gap);
+  box-sizing: border-box;
+}
+
+/* 白い板のような見た目（カレンダーとパネル共通） */
+.calendar-area,
+.panel,
+.clock-bar {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-sizing: border-box;
+}
+
+/* ===== 左側：カレンダー ===== */
+
+.calendar-area {
+  min-height: 0; /* 中身が大きくても枠からはみ出させない */
+  padding: var(--gap);
+  overflow: hidden;
+}
+
+.calendar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--color-muted);
+  font-size: 1.4em;
+}
+
+/* ===== 右側：時計とパネル ===== */
+
+.side {
+  display: grid;
+  /* 上から 時計・枠1・枠2・枠3。3つの枠は同じ高さにする */
+  grid-template-rows: auto 1fr 1fr 1fr;
+  gap: var(--gap);
+  min-height: 0;
+}
+
+.clock-bar {
+  padding: 8px 16px;
+  text-align: right;
+  font-size: 2em;
+  font-weight: bold;
+  /* 数字の幅をそろえて、時刻が変わっても文字の位置がずれないようにする */
+  font-variant-numeric: tabular-nums;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 12px 16px;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.panel-status {
+  color: var(--color-muted);
+  font-size: 0.8em;
+}
+
+/* データの取得に失敗しているパネル */
+.panel.is-error {
+  border-color: var(--color-error);
+}
+
+.panel.is-error .panel-status {
+  color: var(--color-error);
+  font-weight: bold;
+}
+
+.panel-body {
+  flex: 1;
+  min-height: 0;
+}
+
+/* 「準備中」の枠 */
+.panel-empty {
+  align-items: center;
+  justify-content: center;
+  color: var(--color-muted);
+  border-style: dashed;
+}
+
+.panel-empty p {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+/* ===== 夜間表示 ===== */
+
+/* 昼間は夜間用の時計を隠しておく */
+.night-screen {
+  display: none;
+}
+
+/* body に night クラスが付いたら（dashboard.js が付ける）、黒い背景に時計だけを出す */
+body.night {
+  background: #000000;
+}
+
+body.night .dashboard {
+  display: none;
+}
+
+body.night .night-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  height: 100dvh;
+  color: var(--color-night-text);
+  font-size: 10vw;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== スマホなど、幅が狭い（または高さが低い）画面 ===== */
+/* カレンダーを上、パネルを下に縦に並べて、ページ全体をスクロールで見られるようにする */
+
+@media (max-width: 900px), (max-height: 500px) {
+  :root {
+    --font-size: 16px;
+  }
+
+  .dashboard {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+  }
+
+  .calendar-area {
+    height: 75vh;
+    min-height: 480px;
+  }
+
+  .panel {
+    min-height: 160px;
+  }
+
+  /* 縦並びのときは、時計をカレンダーの上に出す。
+     display: contents で右側のまとまりを解き、時計・パネルを直接縦に並べる */
+  .side {
+    display: contents;
+  }
+
+  .clock-bar {
+    order: -1;
+  }
+}
