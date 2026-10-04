@@ -11,6 +11,8 @@ from flask import Flask, render_template
 import config
 
 app = Flask(__name__)
+# APIが返すJSONの日本語を "水" のような記号にせず、そのまま読める形で出す
+app.json.ensure_ascii = False
 
 
 def setup_logging():
