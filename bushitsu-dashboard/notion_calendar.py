@@ -68,14 +68,15 @@ def fetch_pages(range_start, range_end):
     data_source_id = database["data_sources"][0]["id"]
 
     # 検索の条件。
-    # 開始日と終了日がある予定を、Notionがどちらの日付で比べるかは公式の説明にないため、
-    # 少し広め（表示期間の NOTION_LOOKBACK_DAYS 日前から）に取得しておき、
+    # 開始日と終了日がある予定を、Notionが開始日・終了日のどちらで比べるかは公式の説明にないため、
+    # 少し広め（表示期間の前後 NOTION_LOOKBACK_DAYS 日）に取得しておき、
     # 本当に表示期間に重なるかどうかは、あとで pages_to_events() が正確に判定する。
     search_from = range_start - timedelta(days=config.NOTION_LOOKBACK_DAYS)
+    search_until = range_end + timedelta(days=config.NOTION_LOOKBACK_DAYS)
     date_filter = {
         "and": [
             {"property": config.NOTION_DATE_PROPERTY, "date": {"on_or_after": search_from.isoformat()}},
-            {"property": config.NOTION_DATE_PROPERTY, "date": {"on_or_before": range_end.isoformat()}},
+            {"property": config.NOTION_DATE_PROPERTY, "date": {"on_or_before": search_until.isoformat()}},
         ]
     }
 

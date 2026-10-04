@@ -128,6 +128,11 @@ def test_event_starting_before_range_but_ending_inside_is_included():
     assert titles_in_range([make_page("長期休み", "2026-09-01", "2026-09-27")]) == ["長期休み"]
 
 
+def test_event_continuing_after_range_is_included():
+    """表示期間の中で始まり、表示期間の後まで続く予定は表示する。"""
+    assert titles_in_range([make_page("集中講義", "2026-11-05", "2026-11-15")]) == ["集中講義"]
+
+
 def test_event_ending_before_range_is_excluded():
     """表示期間の前日に終わる予定は表示しない。"""
     assert titles_in_range([make_page("前の月", "2026-09-20", "2026-09-26")]) == []
@@ -209,7 +214,7 @@ def test_fetch_pages_filters_by_date_property(monkeypatch):
 
     conditions = fake.query_calls[0]["filter"]["and"]
     assert {"property": "日付", "date": {"on_or_after": "2026-08-27"}} in conditions
-    assert {"property": "日付", "date": {"on_or_before": "2026-11-08"}} in conditions
+    assert {"property": "日付", "date": {"on_or_before": "2026-12-09"}} in conditions
 
 
 # ===== 結果の使い回しと、失敗したときの動き（get_events） =====
