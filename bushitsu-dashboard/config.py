@@ -4,6 +4,7 @@
 #   - それ以外の設定は、このファイルに直接書きます。
 #   設定を変えたら、サーバーを再起動してください。
 
+import os
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -13,6 +14,17 @@ BASE_DIR = Path(__file__).resolve().parent
 
 # .env の中身を環境変数として読み込む（.env がなくてもエラーにはならない）
 load_dotenv(BASE_DIR / ".env")
+
+
+# ===== .env から読む値（秘密情報・環境ごとに違う値） =====
+# 書き方は .env.example を見てください。.env に書いていない値は空文字 "" になります。
+
+# Notion連携（インテグレーション）のトークン。ブラウザやログには絶対に出さないこと
+NOTION_TOKEN = os.getenv("NOTION_TOKEN", "")
+# カレンダーのデータベースID
+NOTION_DATABASE_ID = os.getenv("NOTION_DATABASE_ID", "")
+# カレンダーをタップしたときに開くURL（https://〜 でも notion://〜 でもよい）
+NOTION_CALENDAR_OPEN_URL = os.getenv("NOTION_CALENDAR_OPEN_URL", "")
 
 
 # ===== 画面 =====
@@ -41,6 +53,23 @@ CALENDAR_REFRESH_SECONDS = 600
 
 # 時計やカレンダーで使うタイムゾーン
 TIMEZONE = "Asia/Tokyo"
+
+
+# ===== Notionカレンダー =====
+
+# 予定のタイトルが入っているプロパティの名前（Notionのデータベースの列名）
+NOTION_TITLE_PROPERTY = "名前"
+
+# 予定の日付が入っているプロパティの名前
+NOTION_DATE_PROPERTY = "日付"
+
+# サーバーがNotionの結果を使い回す時間（秒）。この間はNotionに問い合わせない
+CALENDAR_CACHE_SECONDS = 300
+
+# 表示期間より前に始まった予定を探すとき、何日前までさかのぼるか。
+# 例: 31 なら、表示期間の31日前までに始まった予定は、表示期間にかかっていれば表示される。
+# これより長い期間にわたる予定を表示したいときは、数を大きくする。
+NOTION_LOOKBACK_DAYS = 31
 
 
 # ===== サーバー =====

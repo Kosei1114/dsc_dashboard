@@ -11,13 +11,29 @@
   </script>
   {# 時計・夜間表示・パネルの定期更新。パネルのテンプレートより先に読み込む必要がある #}
   <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+  {# カレンダーの部品 FullCalendar（CDNから読み込む。バージョンはURLで固定している）
+     - fullcalendar 本体
+     - 日本語の表示（locales/ja）
+     - 日本時間で正しく表示するための luxon と、FullCalendarでluxonを使うプラグイン #}
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.21/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.21/locales/ja.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@3.7.2/build/global/luxon.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/luxon3@6.1.21/index.global.min.js"></script>
+  <script src="{{ url_for('static', filename='calendar.js') }}"></script>
 {% endblock %}
 
 {% block content %}
 <main class="dashboard">
   {# ===== 左側：カレンダー ===== #}
+  {# タップすると .env の NOTION_CALENDAR_OPEN_URL を開く（static/calendar.js） #}
   <section class="calendar-area">
-    <div class="calendar-placeholder">カレンダー（準備中）</div>
+    <div id="calendar"></div>
+    {# 取得に失敗したときの「最終更新 14:30」などを出す場所 #}
+    <span class="calendar-status"></span>
+    {% if not notion_configured %}
+      <p class="calendar-notice">Notionが未設定です（READMEの「2. Notion連携の準備」を見てください）</p>
+    {% endif %}
   </section>
 
   {# ===== 右側：時計とパネル ===== #}

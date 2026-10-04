@@ -67,18 +67,107 @@ body {
 /* ===== 左側：カレンダー ===== */
 
 .calendar-area {
+  position: relative; /* .calendar-status を右上に置くための基準 */
+  display: flex;
+  flex-direction: column;
   min-height: 0; /* 中身が大きくても枠からはみ出させない */
   padding: var(--gap);
   overflow: hidden;
 }
 
-.calendar-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+#calendar {
+  flex: 1;
+  min-height: 0;
+  cursor: pointer;
+}
+
+/* 取得に失敗したときの「最終更新 14:30」（カレンダーの見出しの右側に出る） */
+.calendar-status {
+  position: absolute;
+  top: calc(var(--gap) + 10px);
+  right: calc(var(--gap) + 4px);
+  font-size: 0.8em;
+}
+
+.calendar-status.is-error {
+  color: var(--color-error);
+  font-weight: bold;
+}
+
+/* Notionが未設定のときの案内 */
+.calendar-notice {
+  margin: var(--gap) 0 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #fff4e5;
+  color: #8a4b00;
+  font-size: 0.85em;
+}
+
+/* ----- FullCalendar の見た目の調整 ----- */
+
+.fc {
+  /* 予定の色 */
+  --fc-event-bg-color: var(--color-accent);
+  --fc-event-border-color: var(--color-accent);
+  --fc-border-color: var(--color-border);
+  /* 今日のマスの背景色 */
+  --fc-today-bg-color: #fff3c4;
+  font-size: 0.85em;
+}
+
+/* 「2026年10月」の見出し */
+.fc .fc-toolbar.fc-header-toolbar {
+  margin-bottom: 8px;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.6em;
+  font-weight: bold;
+}
+
+/* 曜日の見出し */
+.fc .fc-col-header-cell-cushion {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+/* 日付の数字 */
+.fc .fc-daygrid-day-number {
+  color: var(--color-text);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* 土曜は青、日曜は赤 */
+.fc .fc-day-sat .fc-col-header-cell-cushion,
+.fc .fc-day-sat .fc-daygrid-day-number {
+  color: #1565c0;
+}
+
+.fc .fc-day-sun .fc-col-header-cell-cushion,
+.fc .fc-day-sun .fc-daygrid-day-number {
+  color: var(--color-error);
+}
+
+/* 今日の日付の数字を丸で囲んで目立たせる */
+.fc .fc-day-today .fc-daygrid-day-number {
+  margin: 2px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--color-text);
+  color: #ffffff;
+}
+
+/* ほかの月の日付は薄くする */
+.fc .fc-day-other .fc-daygrid-day-top {
+  opacity: 0.4;
+}
+
+/* 「他 2 件」 */
+.fc .fc-daygrid-more-link {
   color: var(--color-muted);
-  font-size: 1.4em;
+  font-weight: bold;
 }
 
 /* ===== 右側：時計とパネル ===== */
