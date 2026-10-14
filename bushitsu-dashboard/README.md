@@ -26,6 +26,7 @@ bushitsu-dashboard/
 ├── .env.example       # .env（秘密情報）の見本
 ├── app.py             # Flaskアプリ。画面とAPIのURLをここに並べる
 ├── notion_calendar.py # Notionから予定を取得し、FullCalendarの形に変換
+├── hydroponics/       # 水耕栽培の処理（sensors/ にセンサーごとの read() を置く）
 ├── panels/            # パネルごとの「APIが返すデータを作る」Pythonファイル
 ├── templates/         # 画面のHTML（Jinja2テンプレート）
 │   ├── base.html      # 全画面に共通する骨組み
@@ -263,7 +264,8 @@ PANELS = [
 
 ## 6. センサーの追加方法
 
-ステップ3（水耕栽培）で追記します。
+センサーの値を読む `read()` の書き方は `hydroponics/sensors/README.md` を見てください。
+値の収集と保存の仕組みは、ステップ3（水耕栽培）で追記します。
 
 ## 7. よくあるトラブルと対処
 
