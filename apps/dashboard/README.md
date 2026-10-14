@@ -287,7 +287,7 @@ PANELS = [
 | `ModuleNotFoundError: No module named 'flask'` | 仮想環境が有効になっていません。`source .venv/bin/activate`（Windowsは `.venv\Scripts\Activate.ps1`）を実行してください |
 | 画面の時計が止まっている・更新されない | ブラウザで再読み込みしてください。直らなければ、ブラウザの開発者ツールの「コンソール」に赤いエラーが出ていないか見てください |
 | パネルに「データを取得できません」と出る | ブラウザで `/api/panels/<パネルID>` を直接開き、エラーになっていないか確認してください。サーバー側のエラーは `logs/app.log` とターミナルに出ます |
-| カレンダーの下に「Notionが未設定です」と出る | `.env` がこのフォルダ（`app.py` と同じ場所）にあり、`NOTION_TOKEN` と `NOTION_DATABASE_ID` が書かれているか確認してください。書き換えたらサーバーを起動し直します |
+| カレンダーの下に「Notionが未設定です」と出る | `apps/dashboard/.env` があり（リポジトリのルートに置いても読まれません）、`NOTION_TOKEN` と `NOTION_DATABASE_ID` が書かれているか確認してください。書き換えたらサーバーを起動し直します |
 | カレンダーに「予定を取得できません」と出る | `logs/app.log` を開き、最後のほうのエラーを見てください。よくある原因は下の3つです |
 | ログに `Could not find database` / `object_not_found` | データベースIDが違うか、インテグレーションをデータベースに接続していません（「2. Notion連携の準備」の(2)(3)） |
 | ログに `API token is invalid` / `unauthorized` | `NOTION_TOKEN` が違います。コピーし直すか、再発行してください |
