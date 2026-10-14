@@ -36,6 +36,7 @@ python -m hydroponics.sensors.bme280
 ```
 
 ひな形のままだと `NotImplementedError` が出ます。
+このフォルダの中で `python bme280.py` のように直接実行しないでください。同じ名前のライブラリ（例：`import bme280`）を読もうとしたときに、自分のファイルを読み込んでしまうことがあります。
 
 ## 一覧への登録
 
