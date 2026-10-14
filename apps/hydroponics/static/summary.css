@@ -1,0 +1,22 @@
+/* このファイルの役割：専用画面とダッシュボードで使う水耕栽培の要約表示です。 */
+.hydro-state {
+  margin: 8px 0;
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+.hydro-state-ok { background: #e6f4ea; color: #176b36; }
+.hydro-state-warn { background: #fff4ce; color: #765700; }
+.hydro-state-danger { background: #fce8e6; color: #a32620; }
+.hydro-state-system { background: #edf0f2; color: #4b5563; }
+.hydro-actions { margin: 8px 0; padding-left: 1.2em; font-size: 0.9em; }
+.hydro-actions:empty { display: none; }
+.hydro-metrics { margin: 8px 0; display: grid; gap: 6px; }
+.hydro-metric { display: flex; justify-content: space-between; gap: 12px; }
+.hydro-metric dt { white-space: nowrap; }
+.hydro-metric dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+.hydro-metric-warn { color: #765700; }
+.hydro-metric-danger { color: #a32620; font-weight: bold; }
+.hydro-metric-stale, .hydro-metric-sensor_error, .hydro-measured, .hydro-more { color: #5f6368; }
+.hydro-measured { margin: 8px 0 0; font-size: 0.85em; }
+.hydro-empty { margin: 12px 0; color: #5f6368; }

@@ -2,7 +2,7 @@
 #   アナログ水位センサーで水位（タンクの底からの高さ、cm）を測ります。
 #   センサーの出力は ADS1115 の A1 で読み、センサーの電源は GPIO17 で測るときだけ入れます。
 #   書き方と約束ごとは、同じフォルダの README.md を見てください。
-#   動作確認：リポジトリのルート で `python -m apps.hydroponics.sensors.water_level` を実行すると結果が表示されます。
+#   動作確認：ルートで `python -m apps.hydroponics.sensors.water_level` を実行すると結果が表示されます。
 
 
 def read():

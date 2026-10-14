@@ -1,0 +1,41 @@
+{# このファイルの役割：水耕栽培アプリの専用画面です。共通入口では /apps/hydroponics/ で開きます。 #}
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>水耕栽培</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='summary.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+  <script>
+    window.HYDROPONICS_CONFIG = {{ js_config | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='summary.js') }}" defer></script>
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <main class="hydro-app">
+    <header class="hydro-app-header">
+      <div>
+        <h1>水耕栽培</h1>
+        <p>小松菜の計測状況</p>
+      </div>
+      {% if dashboard_url %}
+        <a class="hydro-back" href="{{ dashboard_url }}">ダッシュボードに戻る</a>
+      {% endif %}
+    </header>
+    <section class="hydro-card" aria-labelledby="summary-title">
+      <div class="hydro-card-heading">
+        <h2 id="summary-title">現在の状態</h2>
+        <span id="update-status" role="status"></span>
+      </div>
+      <div id="summary" aria-live="polite">
+        <p>計測状況を読み込んでいます</p>
+      </div>
+    </section>
+    {% if js_config.idleReturnSeconds %}
+      <p class="hydro-return-note">3分間操作がなければダッシュボードに戻ります。</p>
+    {% endif %}
+  </main>
+</body>
+</html>

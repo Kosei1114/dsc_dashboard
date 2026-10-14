@@ -1,2 +1,4 @@
-# このファイルの役割：各アプリの依存ライブラリをルートからインストールします。
+# このファイルの役割：
+#   同じラズパイで動かす各アプリの依存ライブラリをまとめてインストールします。
 -r apps/dashboard/requirements.txt
+-r apps/hydroponics/requirements.txt

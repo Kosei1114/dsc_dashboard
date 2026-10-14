@@ -197,6 +197,12 @@ body {
   overflow: hidden;
 }
 
+/* パネル全体をリンクにする。タップとキーボードのどちらでもアプリを開けます。 */
+.panel-link { color: inherit; text-decoration: none; cursor: pointer; }
+.panel-link:hover { border-color: var(--color-accent); }
+.panel-link:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+.panel-link .panel-body { overflow: auto; font-size: 0.85em; }
+
 .panel-header {
   display: flex;
   align-items: baseline;

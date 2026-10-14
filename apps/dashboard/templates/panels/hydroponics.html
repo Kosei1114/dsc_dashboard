@@ -1,0 +1,7 @@
+{# このファイルの役割：水耕栽培アプリの公開された要約表示をダッシュボードの枠内で使います。 #}
+<p class="hydro-empty">計測状況を読み込んでいます</p>
+<script>
+  registerPanel("hydroponics", function (body, data) {
+    window.renderHydroponicsSummary(body, data, { maxActions: 2, maxItems: 4 });
+  });
+</script>

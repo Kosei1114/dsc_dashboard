@@ -80,12 +80,16 @@ function registerPanel(panelId, renderFunction) {
 async function refreshPanel(panelElement) {
   const panelId = panelElement.dataset.panelId;
   const statusElement = panelElement.querySelector(".panel-status");
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), CONFIG.panelFetchTimeoutSeconds * 1000);
   try {
     const renderFunction = panelRenderers[panelId];
     if (!renderFunction) {
       throw new Error("registerPanel(\"" + panelId + "\", ...) が見つかりません");
     }
-    const response = await fetch("/api/panels/" + panelId);
+    // 独立したアプリのAPIを指定できる。指定がなければ従来のパネルAPIを使う。
+    const response = await fetch(panelElement.dataset.apiUrl || "/api/panels/" + panelId,
+      { signal: controller.signal });
     if (!response.ok) {
       throw new Error("HTTP " + response.status);
     }
@@ -104,6 +108,8 @@ async function refreshPanel(panelElement) {
     } else {
       statusElement.textContent = "データを取得できません";
     }
+  } finally {
+    clearTimeout(timeout);
   }
 }
 

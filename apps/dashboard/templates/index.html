@@ -12,6 +12,16 @@
   {# 時計・夜間表示・パネルの定期更新。パネルのテンプレートより先に読み込む必要がある #}
   <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
 
+  {# 各アプリが提供する要約の表示部品。アプリ内部のPythonコードは読み込みません。 #}
+  {% for panel in panels if panel %}
+    {% if panel.view_style_url %}
+      <link rel="stylesheet" href="{{ panel.view_style_url }}">
+    {% endif %}
+    {% if panel.view_script_url %}
+      <script src="{{ panel.view_script_url }}"></script>
+    {% endif %}
+  {% endfor %}
+
   {# カレンダーの部品 FullCalendar（CDNから読み込む。バージョンはURLで固定している）
      - fullcalendar 本体
      - 日本語の表示（locales/ja）
@@ -45,7 +55,12 @@
     {% for panel in panels %}
       {% if panel %}
         {# パネルの外枠（タイトルと更新状況）。中身は templates/panels/<パネルID>.html #}
-        <section class="panel" data-panel-id="{{ panel.id }}">
+        {% if panel.detail_url %}
+        <a class="panel panel-link" href="{{ panel.detail_url }}" aria-label="{{ panel.title }}アプリを開く"
+           data-panel-id="{{ panel.id }}" data-api-url="{{ panel.api_url or '/api/panels/' ~ panel.id }}">
+        {% else %}
+        <section class="panel" data-panel-id="{{ panel.id }}" data-api-url="{{ panel.api_url or '/api/panels/' ~ panel.id }}">
+        {% endif %}
           <header class="panel-header">
             <h2 class="panel-title">{{ panel.title }}</h2>
             <span class="panel-status"></span>
@@ -53,7 +68,7 @@
           <div class="panel-body">
             {% include "panels/" ~ panel.id ~ ".html" %}
           </div>
-        </section>
+        {% if panel.detail_url %}</a>{% else %}</section>{% endif %}
       {% else %}
         {% include "panels/empty.html" %}
       {% endif %}

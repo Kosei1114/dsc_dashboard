@@ -33,9 +33,14 @@ NOTION_CALENDAR_OPEN_URL = os.getenv("NOTION_CALENDAR_OPEN_URL", "")
 # None の枠は「準備中」と表示されます。
 # パネルの追加方法は README の「パネルの追加方法」を見てください。
 PANELS = [
-    # 水耕栽培パネルができたら、下の行の先頭の「# 」を消して、次の行の None を消す
-    # {"id": "hydroponics", "title": "水耕栽培", "detail_url": "/panels/hydroponics"},
-    None,  # 準備中
+    {
+        "id": "hydroponics",
+        "title": "水耕栽培",
+        "api_url": "/apps/hydroponics/api/summary",
+        "detail_url": "/apps/hydroponics/?from=dashboard",
+        "view_script_url": "/apps/hydroponics/static/summary.js",
+        "view_style_url": "/apps/hydroponics/static/summary.css",
+    },
     None,  # 準備中
     None,  # 準備中
 ]
@@ -47,6 +52,9 @@ NIGHT_END = "07:00"
 
 # パネルのデータを取り直す間隔（秒）
 PANEL_REFRESH_SECONDS = 60
+
+# APIが返らないときに更新処理を打ち切るまでの秒数
+PANEL_FETCH_TIMEOUT_SECONDS = 10
 
 # カレンダーの予定を取り直す間隔（秒）
 CALENDAR_REFRESH_SECONDS = 600

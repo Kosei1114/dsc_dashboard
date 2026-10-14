@@ -1,6 +1,6 @@
 # このファイルの役割：
 #   Flaskアプリの本体です。画面とAPIのURLを、このファイルにまとめて並べます。
-#   開発中は、リポジトリのルートで `python -m apps.dashboard.app` を実行し、
+#   単体での開発中は、リポジトリのルートで `python -m apps.dashboard.app` を実行し、
 #   ブラウザで http://127.0.0.1:8000/ を開きます。
 
 import logging
@@ -45,6 +45,7 @@ def index():
         "nightStart": config.NIGHT_START,
         "nightEnd": config.NIGHT_END,
         "panelRefreshSeconds": config.PANEL_REFRESH_SECONDS,
+        "panelFetchTimeoutSeconds": config.PANEL_FETCH_TIMEOUT_SECONDS,
         "calendarRefreshSeconds": config.CALENDAR_REFRESH_SECONDS,
         "calendarOpenUrl": config.NOTION_CALENDAR_OPEN_URL,
     }
