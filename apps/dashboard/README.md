@@ -3,9 +3,11 @@
 岡山大学DS部の部室に置いたiPadに常時表示する、Webのダッシュボードです。
 画面の左半分にNotionのカレンダー、右半分に時計と機能ごとの「パネル」を並べます。
 
-本書のコマンドはリポジトリのルートで実行します。単なる `config.py` や `.env` は `apps/dashboard/` 内を指します。
-
 仕様はリポジトリのルートにある `部室ダッシュボード 仕様書.md` を見てください。
+
+ダッシュボードと水耕栽培アプリを一緒に起動する手順は、[ルートのREADME](../../README.md) を見てください。
+このREADMEのコマンドも、すべてリポジトリのルートで実行します。
+単なる `config.py`・`.env`・`templates/` などのファイル名は、`apps/dashboard/` 内を指します。
 
 ## いまできていること
 
@@ -13,7 +15,7 @@
 | --- | --- | --- |
 | 1. 土台 | 左右分割の画面、時計、「準備中」の枠、夜間表示、スマホ向けの縦並び | 完了 |
 | 2. カレンダー | Notionの予定を月表示、タップでNotionを開く | 完了 |
-| 3. 水耕栽培 | センサー値の収集とパネル表示 | 未実装 |
+| 3. 水耕栽培 | 要約パネルと独立アプリへの遷移 | 接続済み。収集・DB・判定は未実装 |
 | 4. ラズパイへの設置 | systemd・cron の設定 | 未実装 |
 | 5. 外部公開 | Cloudflare Tunnel と Access | 未実装 |
 
@@ -75,7 +77,7 @@ pip install -r requirements.txt
 
 ```bash
 cp apps/dashboard/.env.example apps/dashboard/.env        # Mac / Linux
-copy apps/dashboard/.env.example apps/dashboard/.env      # Windows
+copy apps\dashboard\.env.example apps\dashboard\.env      # Windows
 ```
 
 中身はあとで「2. Notion連携の準備」で書きます。空のままでも起動でき、
@@ -94,7 +96,8 @@ python app.py
 止めるときはターミナルで `Ctrl + C` を押します。
 
 > ポート8000番がほかのアプリで使われていて起動できないときは、
-> `flask --app apps.dashboard.app run --port 8001` のように別の番号で起動できます。
+> 共通入口は `waitress-serve --host=127.0.0.1 --port=8002 app:application` のように別の番号で起動できます。
+> ダッシュボードだけを起動する場合は `python -m apps.dashboard.app` を使います。
 
 ### 表示を確かめる
 
@@ -210,7 +213,7 @@ def get_data():
 
 ### (2) API の URL：`app.py`
 
-`app.py` の先頭の import の並び（`from . import config, notion_calendar` の下）にパネルのファイルを足し、
+`apps/dashboard/app.py` の先頭の import の並びにパネルのファイルを足し、
 「API（JSONを返すURL）」の場所に関数を1つ足します。URL は必ず `/api/panels/<パネルID>` にします。
 
 ```python
@@ -262,16 +265,25 @@ PANELS = [
 前回の表示を残したまま、パネルの右上に「最終更新 14:30」のように最後に成功した時刻が赤字で出ます。
 1つのパネルが失敗しても、ほかのパネルには影響しません。
 
+### 独立したアプリの要約を表示する
+
+独立アプリの要約APIを使う場合は、上の(1)(2)の代わりに `PANELS` へ `api_url` を設定します。
+`detail_url` があればパネル全体がリンクになり、同じタブでそのアプリを開きます。
+水耕栽培では `api_url` を `/apps/hydroponics/api/summary`、
+`detail_url` を `/apps/hydroponics/?from=dashboard` に設定しています。
+アプリが提供する表示部品がある場合は、`view_script_url` と `view_style_url` も登録できます。
+設定するURLは共通入口から到達できる同じサイトのパスにしてください。
+
 ## 6. センサーの追加方法
 
-センサーの値を読む `read()` の書き方は `apps/hydroponics/sensors/README.md` を見てください。
-値の収集と保存の仕組みは、水耕栽培アプリ側で追記します。
+センサーの値を読む `read()` の書き方は、[水耕栽培アプリのセンサーREADME](../hydroponics/sensors/README.md) を見てください。
+収集と保存は水耕栽培アプリが担当します。
 
 ## 7. よくあるトラブルと対処
 
 | 症状 | 確認すること |
 | --- | --- |
-| `python app.py` で `Address already in use` と出る | ポート8000番がほかのアプリで使われています。そのアプリを止めるか、`flask --app apps.dashboard.app run --port 8001` で別の番号を使ってください |
+| `python app.py` で `Address already in use` と出る | ポート8000番がほかのアプリで使われています。そのアプリを止めるか、`waitress-serve --host=127.0.0.1 --port=8002 app:application` で別の番号を使ってください |
 | `ModuleNotFoundError: No module named 'flask'` | 仮想環境が有効になっていません。`source .venv/bin/activate`（Windowsは `.venv\Scripts\Activate.ps1`）を実行してください |
 | 画面の時計が止まっている・更新されない | ブラウザで再読み込みしてください。直らなければ、ブラウザの開発者ツールの「コンソール」に赤いエラーが出ていないか見てください |
 | パネルに「データを取得できません」と出る | ブラウザで `/api/panels/<パネルID>` を直接開き、エラーになっていないか確認してください。サーバー側のエラーは `logs/app.log` とターミナルに出ます |
