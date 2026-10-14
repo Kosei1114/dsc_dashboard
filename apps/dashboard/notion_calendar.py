@@ -13,7 +13,7 @@ from zoneinfo import ZoneInfo
 from notion_client import Client
 from notion_client.helpers import collect_paginated_api
 
-import config
+from . import config
 
 logger = logging.getLogger(__name__)
 

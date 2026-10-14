@@ -3,6 +3,8 @@
 岡山大学DS部の部室に置いたiPadに常時表示する、Webのダッシュボードです。
 画面の左半分にNotionのカレンダー、右半分に時計と機能ごとの「パネル」を並べます。
 
+本書のコマンドはリポジトリのルートで実行します。単なる `config.py` や `.env` は `apps/dashboard/` 内を指します。
+
 仕様はリポジトリのルートにある `部室ダッシュボード 仕様書.md` を見てください。
 
 ## いまできていること
@@ -18,15 +20,13 @@
 ## フォルダの中身
 
 ```text
-bushitsu-dashboard/
+apps/dashboard/
 ├── README.md          # このファイル
 ├── requirements.txt   # 使うPythonライブラリの一覧
-├── pytest.ini         # テストの設定
 ├── config.py          # 設定値（パネルの並び、夜間の時間帯など）
 ├── .env.example       # .env（秘密情報）の見本
 ├── app.py             # Flaskアプリ。画面とAPIのURLをここに並べる
 ├── notion_calendar.py # Notionから予定を取得し、FullCalendarの形に変換
-├── hydroponics/       # 水耕栽培の処理（sensors/ にセンサーごとの read() を置く）
 ├── panels/            # パネルごとの「APIが返すデータを作る」Pythonファイル
 ├── templates/         # 画面のHTML（Jinja2テンプレート）
 │   ├── base.html      # 全画面に共通する骨組み
@@ -46,7 +46,7 @@ bushitsu-dashboard/
 ## 1. 自分のPCで起動する
 
 Python 3.11 以上が必要です。ターミナル（Windowsは「PowerShell」）を開き、
-このフォルダ（`bushitsu-dashboard`）に移動してから、次のコマンドを順に実行します。
+リポジトリのルート（`dsc_dashboard`）に移動してから、次のコマンドを順に実行します。
 
 ### 仮想環境を作ってライブラリを入れる（最初の1回だけ）
 
@@ -74,8 +74,8 @@ pip install -r requirements.txt
 `.env.example` をコピーして `.env` という名前のファイルを作ります。
 
 ```bash
-cp .env.example .env        # Mac / Linux
-copy .env.example .env      # Windows
+cp apps/dashboard/.env.example apps/dashboard/.env        # Mac / Linux
+copy apps/dashboard/.env.example apps/dashboard/.env      # Windows
 ```
 
 中身はあとで「2. Notion連携の準備」で書きます。空のままでも起動でき、
@@ -94,7 +94,7 @@ python app.py
 止めるときはターミナルで `Ctrl + C` を押します。
 
 > ポート8000番がほかのアプリで使われていて起動できないときは、
-> `flask --app app run --port 8001` のように別の番号で起動できます。
+> `flask --app apps.dashboard.app run --port 8001` のように別の番号で起動できます。
 
 ### 表示を確かめる
 
@@ -210,11 +210,11 @@ def get_data():
 
 ### (2) API の URL：`app.py`
 
-`app.py` の先頭の import の並び（`import notion_calendar` の下）にパネルのファイルを足し、
+`app.py` の先頭の import の並び（`from . import config, notion_calendar` の下）にパネルのファイルを足し、
 「API（JSONを返すURL）」の場所に関数を1つ足します。URL は必ず `/api/panels/<パネルID>` にします。
 
 ```python
-from panels import message
+from .panels import message
 ```
 
 ```python
@@ -264,14 +264,14 @@ PANELS = [
 
 ## 6. センサーの追加方法
 
-センサーの値を読む `read()` の書き方は `hydroponics/sensors/README.md` を見てください。
-値の収集と保存の仕組みは、ステップ3（水耕栽培）で追記します。
+センサーの値を読む `read()` の書き方は `apps/hydroponics/sensors/README.md` を見てください。
+値の収集と保存の仕組みは、水耕栽培アプリ側で追記します。
 
 ## 7. よくあるトラブルと対処
 
 | 症状 | 確認すること |
 | --- | --- |
-| `python app.py` で `Address already in use` と出る | ポート8000番がほかのアプリで使われています。そのアプリを止めるか、`flask --app app run --port 8001` で別の番号を使ってください |
+| `python app.py` で `Address already in use` と出る | ポート8000番がほかのアプリで使われています。そのアプリを止めるか、`flask --app apps.dashboard.app run --port 8001` で別の番号を使ってください |
 | `ModuleNotFoundError: No module named 'flask'` | 仮想環境が有効になっていません。`source .venv/bin/activate`（Windowsは `.venv\Scripts\Activate.ps1`）を実行してください |
 | 画面の時計が止まっている・更新されない | ブラウザで再読み込みしてください。直らなければ、ブラウザの開発者ツールの「コンソール」に赤いエラーが出ていないか見てください |
 | パネルに「データを取得できません」と出る | ブラウザで `/api/panels/<パネルID>` を直接開き、エラーになっていないか確認してください。サーバー側のエラーは `logs/app.log` とターミナルに出ます |

@@ -1,0 +1,2 @@
+# このファイルの役割：各アプリの依存ライブラリをルートからインストールします。
+-r apps/dashboard/requirements.txt

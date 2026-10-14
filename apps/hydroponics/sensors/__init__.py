@@ -8,6 +8,6 @@ DUMMY_SENSORS = []
 
 # ラズパイ用。read() ができて、ラズパイで動作確認できたものから足す
 # 例：
-#   from hydroponics.sensors import bh1750, bme280, water_level
+#   from apps.hydroponics.sensors import bh1750, bme280, water_level
 #   PI_SENSORS = [bme280, bh1750, water_level]
 PI_SENSORS = []

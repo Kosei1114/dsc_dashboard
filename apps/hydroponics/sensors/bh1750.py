@@ -1,7 +1,7 @@
 # このファイルの役割：
 #   BH1750 で照度（窓からの日射）を測ります（I2C、アドレスは 0x23）。
 #   書き方と約束ごとは、同じフォルダの README.md を見てください。
-#   動作確認：bushitsu-dashboard/ で `python -m hydroponics.sensors.bh1750` を実行すると結果が表示されます。
+#   動作確認：リポジトリのルート で `python -m apps.hydroponics.sensors.bh1750` を実行すると結果が表示されます。
 
 
 def read():

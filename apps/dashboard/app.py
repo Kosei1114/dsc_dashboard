@@ -1,6 +1,6 @@
 # このファイルの役割：
 #   Flaskアプリの本体です。画面とAPIのURLを、このファイルにまとめて並べます。
-#   開発中は、リポジトリのルートで `python app.py` を実行し、
+#   開発中は、リポジトリのルートで `python -m apps.dashboard.app` を実行し、
 #   ブラウザで http://127.0.0.1:8000/ を開きます。
 
 import logging
@@ -9,8 +9,7 @@ from logging.handlers import RotatingFileHandler
 
 from flask import Flask, jsonify, render_template, request
 
-import config
-import notion_calendar
+from . import config, notion_calendar
 
 app = Flask(__name__)
 # APIが返すJSONの日本語を "\u6c34" のような記号にせず、そのまま読める形で出す

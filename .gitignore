@@ -1,2 +1,8 @@
 # Pythonの仮想環境をGitの管理対象から除外する
 .venv/
+# 各アプリの秘密情報・実行時データ・Pythonのキャッシュ
+.env
+data/
+logs/
+__pycache__/
+.pytest_cache/

@@ -9,7 +9,7 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
-# このファイルがあるフォルダ（リポジトリのルート）
+# このアプリのフォルダ（apps/dashboard）
 BASE_DIR = Path(__file__).resolve().parent
 
 # .env の中身を環境変数として読み込む（.env がなくてもエラーにはならない）

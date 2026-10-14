@@ -29,10 +29,10 @@
 
 ## 動作確認
 
-`bushitsu-dashboard/` で次のように実行すると、自分のセンサーの `read()` だけを動かして結果を表示できます（`bme280` の部分を自分のファイル名に変える）。
+`リポジトリのルート` で次のように実行すると、自分のセンサーの `read()` だけを動かして結果を表示できます（`bme280` の部分を自分のファイル名に変える）。
 
 ```bash
-python -m hydroponics.sensors.bme280
+python -m apps.hydroponics.sensors.bme280
 ```
 
 ひな形のままだと `NotImplementedError` が出ます。

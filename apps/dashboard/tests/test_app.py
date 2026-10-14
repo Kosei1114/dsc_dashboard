@@ -2,8 +2,8 @@
 #   ダッシュボードの画面（/）が正しく表示されるかを確かめるテストです。
 #   リポジトリのルートで `pytest` を実行すると動きます。
 
-import app as app_module
-import config
+from apps.dashboard import app as app_module
+from apps.dashboard import config
 
 
 def test_index_shows_three_empty_frames(monkeypatch):

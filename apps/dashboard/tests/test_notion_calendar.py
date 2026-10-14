@@ -7,9 +7,9 @@ from datetime import date
 
 import pytest
 
-import app as app_module
-import config
-import notion_calendar
+from apps.dashboard import app as app_module
+from apps.dashboard import config
+from apps.dashboard import notion_calendar
 
 
 def make_page(title, start, end=None):
