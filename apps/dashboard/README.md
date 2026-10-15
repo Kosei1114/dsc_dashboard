@@ -286,7 +286,7 @@ PANELS = [
 | `python app.py` で `Address already in use` と出る | ポート8000番がほかのアプリで使われています。そのアプリを止めるか、`waitress-serve --host=127.0.0.1 --port=8002 app:application` で別の番号を使ってください |
 | `ModuleNotFoundError: No module named 'flask'` | 仮想環境が有効になっていません。`source .venv/bin/activate`（Windowsは `.venv\Scripts\Activate.ps1`）を実行してください |
 | 画面の時計が止まっている・更新されない | ブラウザで再読み込みしてください。直らなければ、ブラウザの開発者ツールの「コンソール」に赤いエラーが出ていないか見てください |
-| パネルに「データを取得できません」と出る | ブラウザで `/api/panels/<パネルID>` を直接開き、エラーになっていないか確認してください。サーバー側のエラーは `logs/app.log` とターミナルに出ます |
+| パネルに「データを取得できません」と出る | ブラウザでそのパネルのAPIを直接開き、エラーになっていないか確認してください。URLは `config.py` の `PANELS` に `api_url` があればその値（水耕栽培は `/apps/hydroponics/api/summary`）、なければ `/api/panels/<パネルID>` です。サーバー側のエラーは `logs/app.log` とターミナルに出ます |
 | カレンダーの下に「Notionが未設定です」と出る | `apps/dashboard/.env` があり（リポジトリのルートに置いても読まれません）、`NOTION_TOKEN` と `NOTION_DATABASE_ID` が書かれているか確認してください。書き換えたらサーバーを起動し直します |
 | カレンダーに「予定を取得できません」と出る | `logs/app.log` を開き、最後のほうのエラーを見てください。よくある原因は下の3つです |
 | ログに `Could not find database` / `object_not_found` | データベースIDが違うか、インテグレーションをデータベースに接続していません（「2. Notion連携の準備」の(2)(3)） |
